@@ -1,0 +1,36 @@
+{
+    "name" : "serwersms/serwersmsbundle",
+    "description" : "This is a Symfony2 Bundle for communication with the API v2 SerwerSMS.pl",
+    "type" : "symfony-bundle",
+	"version": "1.0.1",
+    "authors": [
+        {
+            "name": "SerwerSMS.pl",
+            "email": "biuro@serwersms.pl"
+        }
+    ],
+    "keywords" : [
+        "serwersms","api sms","sms"
+    ],
+	"homepage": "https://serwersms.pl/",
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+		"php": ">=5.3.9",
+		"symfony/symfony": ">=2.7"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "SerwerSMS\\SerwerSMSBundle" : ""
+        }
+    },
+    "target-dir" : "SerwerSMS/SerwerSMSBundle",
+    "repositories" : [{
+    }],
+    "extra" : {
+		"branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

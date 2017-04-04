@@ -1,0 +1,4 @@
+services:
+    serwer_sms:
+        class: SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS
+        arguments: ["%serwer_sms_username%","%serwer_sms_password%","%serwer_sms_api_url%","%serwer_sms_format%"]
