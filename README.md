@@ -13,7 +13,7 @@ Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniżs
         ...
         "repositories" : [{
             "type" : "git",
-                "url" : "https://github.com/SerwerSMSpl/serwersms-symfony2-bundle.git"
+                "url" : "https://github.com/SerwerSMSpl/serwersms-symfony-bundle.git"
          }],
     }
 ```
