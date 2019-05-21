@@ -17,8 +17,7 @@
         "MIT"
     ],
     "require" : {
-		"php": ">=5.3.9",
-		"symfony/symfony": ">=2.7"
+		"php": ">=5.3.9"
     },
     "autoload" : {
         "psr-0" : {
@@ -29,8 +28,6 @@
     "repositories" : [{
     }],
     "extra" : {
-		"branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
+		
     }
 }
