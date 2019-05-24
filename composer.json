@@ -3,7 +3,6 @@
     "description" : "This is a Symfony2,3,4 Bundle for communication with the API v2 SerwerSMS.pl",
     "type" : "symfony-bundle",
 	"version": "1.0.2",
-	"minimum-stability": "stable"
     "authors": [
         {
             "name": "SerwerSMS.pl",

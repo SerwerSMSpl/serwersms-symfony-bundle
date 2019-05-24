@@ -1,6 +1,6 @@
 # SerwerSMSBundle - Symfony
 
-Klient PHP dla frameworka Symfony (ver 2,3) do komunikacji zdalnej z API v2 SerwerSMS.pl
+Klient PHP dla frameworka Symfony (ver 2,3,4) do komunikacji zdalnej z API v2 SerwerSMS.pl
 
 Zalecane jest, aby komunikacja przez HTTPS API odbywała się z loginów utworzonych specjalnie do połączenia przez API. Konto użytkownika API można utworzyć w Panelu Klienta → Ustawienia interfejsów → HTTPS XML API → Użytkownicy.
 ## Instalacja
@@ -10,14 +10,57 @@ Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniżs
         "require": {
             "serwersms/serwersmsbundle" : "dev-master"
         }
-        ...
-        "repositories" : [{
-            "type" : "git",
-                "url" : "https://github.com/SerwerSMSpl/serwersms-symfony-bundle.git"
-         }],
+        
     }
 ```
-## Wysyłka SMS
+## Wysyłka SMS Symfony 4
+#service.yml:
+```php
+	parameters:
+	    serwer_sms_username: "username"
+	    serwer_sms_password: "password"
+	    serwer_sms_api_url: "https://api2.serwersms.pl/"
+	    serwer_sms_format: "json"
+	services:
+	    serwer_sms:
+            class: SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS
+            arguments: ["%serwer_sms_username%","%serwer_sms_password%","%serwer_sms_api_url%","%serwer_sms_format%"]
+        SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS:  '@serwer_sms'
+```
+Controller:
+```php
+    namespace App\Controller;
+    use SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS;
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    
+    class TestController  extends AbstractController
+    {
+        public function index(SerwerSMS $serwersms)
+        {
+            try{
+            
+            	  $result = $serwersms->messages->sendSms(
+        	            array(
+        	                    '+48500600700',
+        	                    '+48600700800'
+        	            ),
+        	            'Test FULL message',
+        	            'INFORMACJA',
+        	            array(
+        	                    'test' => true,
+        	                    'details' => true
+        	            )
+        	    );
+                
+                die(var_dump($result));
+        
+            } catch(Exception $e){
+    	        echo 'ERROR: '.$e->getMessage();
+    	    }
+        }
+    }
+```
+## Wysyłka SMS Symfony 2,3
 
 AppKernel.php:
 ```php
