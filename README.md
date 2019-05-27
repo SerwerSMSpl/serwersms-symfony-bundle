@@ -8,7 +8,7 @@ Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniżs
 ```php
 	{
         "require": {
-            "serwersms/serwersmsbundle" : "1.*"
+            "serwersms/serwersmsbundle" : "1.0.3"
         }
         
     }
@@ -21,11 +21,7 @@ Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniżs
 	    serwer_sms_password: "password"
 	    serwer_sms_api_url: "https://api2.serwersms.pl/"
 	    serwer_sms_format: "json"
-	services:
-	    serwer_sms:
-            class: SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS
-            arguments: ["%serwer_sms_username%","%serwer_sms_password%","%serwer_sms_api_url%","%serwer_sms_format%"]
-        SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS:  '@serwer_sms'
+	
 ```
 Controller:
 ```php
