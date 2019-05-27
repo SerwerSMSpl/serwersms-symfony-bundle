@@ -1,4 +1,11 @@
+parameters:
+    serwer_sms_username:    'username'
+    serwer_sms_password:    'password'
+    serwer_sms_api_url:     'https://api2.serwersms.pl/'
+    serwer_sms_format:      'json'
+
 services:
     serwer_sms:
         class: SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS
         arguments: ["%serwer_sms_username%","%serwer_sms_password%","%serwer_sms_api_url%","%serwer_sms_format%"]
+    SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS:  '@serwer_sms'
