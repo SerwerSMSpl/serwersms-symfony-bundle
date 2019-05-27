@@ -8,7 +8,7 @@ Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniżs
 ```php
 	{
         "require": {
-            "serwersms/serwersmsbundle" : "1.0.2"
+            "serwersms/serwersmsbundle" : "1.*"
         }
         
     }
