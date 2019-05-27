@@ -24,6 +24,6 @@
             "SerwerSMS\\SerwerSMSBundle" : ""
         }
     },
-    "target-dir" : "SerwerSMS/SerwerSMSBundle",
+    "target-dir" : "SerwerSMS/SerwerSMSBundle"
     
 }
