@@ -2,7 +2,7 @@
 
 Klient PHP dla frameworka Symfony (ver 2,3,4) do komunikacji zdalnej z API v2 SerwerSMS.pl
 
-Zalecane jest, aby komunikacja przez HTTPS API odbywała się z loginów utworzonych specjalnie do połączenia przez API. Konto użytkownika API można utworzyć w Panelu Klienta → Ustawienia interfejsów → HTTPS XML API → Użytkownicy.
+Zalecane jest, aby komunikacja przez HTTPS API odbywała się z loginów utworzonych specjalnie do połączenia przez API. Konto użytkownika API można utworzyć w Panelu Klienta → Ustawienia interfejsów → HTTP API → Użytkownicy API.
 ## Instalacja
 Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniższego kodu:
 ```php
