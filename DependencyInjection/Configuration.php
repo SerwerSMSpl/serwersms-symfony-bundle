@@ -17,8 +17,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('serwer_sms_serwer_sms');
+        $treeBuilder = new TreeBuilder('serwer_sms_serwer_sms');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
