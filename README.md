@@ -1,270 +1,299 @@
 # SerwerSMSBundle - Symfony
 
-Klient PHP dla frameworka Symfony (ver 2,3,4) do komunikacji zdalnej z API v2 SerwerSMS.pl
+Klient PHP dla frameworka Symfony do komunikacji z API v2 SerwerSMS.pl
 
 Zalecane jest, aby komunikacja przez HTTPS API odbywała się z loginów utworzonych specjalnie do połączenia przez API. Konto użytkownika API można utworzyć w Panelu Klienta → Ustawienia interfejsów → HTTP API → Użytkownicy API.
-## Instalacja
-Instalacja odbywa się poprzez composer i dodanie do pliku composer.json poniższego kodu:
-```php
-	{
-        "require": {
-            "serwersms/serwersmsbundle" : "1.0.3"
-        }
-        
-    }
-```
-## Wysyłka SMS Symfony 4
-#service.yml:
-```php
-	parameters:
-	    serwer_sms_username: "username"
-	    serwer_sms_password: "password"
-	    serwer_sms_api_url: "https://api2.serwersms.pl/"
-	    serwer_sms_format: "json"
-	
-```
-Controller:
-```php
-    namespace App\Controller;
-    use SerwerSMS\SerwerSMSBundle\SerwerSMS\SerwerSMS;
-    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-    
-    class TestController  extends AbstractController
-    {
-        public function index(SerwerSMS $serwersms)
-        {
-            try{
-            
-            	  $result = $serwersms->messages->sendSms(
-        	            array(
-        	                    '+48500600700',
-        	                    '+48600700800'
-        	            ),
-        	            'Test FULL message',
-        	            'INFORMACJA',
-        	            array(
-        	                    'test' => true,
-        	                    'details' => true
-        	            )
-        	    );
-                
-                die(var_dump($result));
-        
-            } catch(Exception $e){
-    	        echo 'ERROR: '.$e->getMessage();
-    	    }
-        }
-    }
-```
-## Wysyłka SMS Symfony 2,3
 
-AppKernel.php:
-```php
-	class AppKernel extends Kernel
-	{
-	    public function registerBundles()
-	    {
-	        $bundles = array(
-	            ...
-	            new SerwerSMS\SerwerSMSBundle\SerwerSMSBundle(),
-	        );
-					
-	        ...
-	        
-	        return $bundles;
-	    }
-	}
-```
-config.php:
-```php
-	parameters:
-	    serwer_sms_username: "username"
-	    serwer_sms_password: "password"
-	    serwer_sms_api_url: "https://api2.serwersms.pl/"
-	    serwer_sms_format: "json"
-```
-
-App:
-```php
-
-	try{
-	
-	  $serwersms = $this->get('serwer_sms');
-	
-	  // SMS FULL
-	  $result = $serwersms->messages->sendSms(
-	            array(
-	                    '+48500600700',
-	                    '+48600700800'
-	            ),
-	            'Test FULL message',
-	            'INFORMACJA',
-	            array(
-	                    'test' => true,
-	                    'details' => true
-	            )
-	  );
-	
-	  // SMS ECO
-	  $result = $serwersms->messages->sendSms(
-	            array(
-	                    '+48500600700',
-	                    '+48600700800'
-	            ),
-	            'Test ECO message',
-	            null,
-	            array(
-	                    'test' => true,
-	                    'details' => true
-	            )
-	  );
-	
-	  // VOICE from text
-	  $result = $serwersms->messages->sendVoice(
-	            array(
-	                    '+48500600700',
-	                    '+48600700800'
-	            ),
-	            array(
-	                    'text' => 'Test message',
-	                    'test' => true,
-	                    'details' => true
-	            )
-	  );
-	
-	  // MMS
-	  $list = $serwersms->files->index('mms');
-	  $result = $serwersms->messages->sendMms(
-	            array(
-	                    '+48500600700',
-	                    '+48600700800'
-	            ),
-	            'MMS Title',
-	            array(
-	                    'test' => true,
-	                    'file_id' => $list->items[0]->id,
-	                    'details' => true
-	            )
-	  );
-	
-	  echo 'Skolejkowano: '.$result->queued.'<br />';
-	  echo 'Niewysłano: '.$result->unsent.'<br />';
-	
-	  foreach($result->items as $sms){
-	        
-	        echo 'ID: '.$sms->id.'<br />';
-	        echo 'NUMER: '.$sms->phone.'<br />';
-	        echo 'STATUS: '.$sms->status.'<br />';
-	        echo 'CZĘŚCI: '.$sms->parts.'<br />';
-	        echo 'WIADOMOŚĆ: '.$sms->text.'<br />';
-	        
-	  }
-	
-	} catch(Exception $e){
-	    echo 'ERROR: '.$e->getMessage();
-	}
-```
-Wysyłka spersonalizowanych SMS
-```php
-	try{
-	
-	  $serwersms = $this->get('serwer_sms');
-	
-	  $messages[] = array(
-	      'phone' => '500600700',
-	      'text' => 'First message'
-	  );
-	  $messages[] = array(
-	      'phone' => '600700800',
-	      'text' => 'Second message'
-	  );
-	
-	  $result = $serwersms->messages->sendPersonalized(
-	            $messages,
-	            'INFORMACJA',
-	            array(
-	                    'test' => true,
-	                    'details' => true
-	            )
-	  );
-	
-	  echo 'Skolejkowano: '.$result->queued.'<br />';
-	  echo 'Niewysłano: '.$result->unsent.'<br />';
-	
-	  foreach($result->items as $sms){
-	  
-	        echo 'ID: '.$sms->id.'<br />';
-	        echo 'NUMER: '.$sms->phone.'<br />';
-	        echo 'STATUS: '.$sms->status.'<br />';
-	        echo 'CZĘŚCI: '.$sms->parts.'<br />';
-	        echo 'WIADOMOŚĆ: '.$sms->text.'<br />';
-	        
-	  }
-	
-	} catch(Exception $e){
-	    echo 'ERROR: '.$e->getMessage();
-	}
-```
-Pobieranie raportów doręczeń
-```php
-	try{
-	
-    	  $serwersms = $this->get('serwer_sms');
-    	
-    	  // Get messages reports
-    	  $result = $serwersms->messages->reports(array('id' => array('aca3944055')));
-    	
-    	  foreach($result->items as $sms){
-    	  
-    	        echo 'ID: '.$sms->id.'<br />';
-    	        echo 'NUMER: '.$sms->phone.'<br />';
-    	        echo 'STATUS: '.$sms->status.'<br />';
-    	        echo 'SKOLEJKOWANO: '.$sms->queued.'<br />';
-    	        echo 'WYSŁANO: '.$sms->sent.'<br />';
-    	        echo 'DORĘCZONO: '.$sms->delivered.'<br />';
-    	        echo 'NADAWCA: '.$sms->sender.'<br />';
-    	        echo 'TYP: '.$sms->type.'<br />';
-    	        echo 'WIADOMOŚĆ: '.$sms->text.'<br />';
-    	        
-    	  }
-	
-	} catch(Exception $e){
-	    echo 'ERROR: '.$e->getMessage();
-	}
-```
-Pobieranie wiadomości przychodzących
-```php
-	try{
-    	  $serwersms = $this->get('serwer_sms');
-    	
-    	  // Get recived messages
-    	  $result = $serwersms->messages->recived('ndi');
-    	
-    	  foreach($result->items as $sms){
-    	  
-    	        echo 'ID: '.$sms->id.'<br />';
-    	        echo 'TYP: '.$sms->type.'<br />';
-    	        echo 'NUMER: '.$sms->phone.'<br />';
-    	        echo 'DATA: '.$sms->recived.'<br />';
-    	        echo 'CZARNA LISTA: '.$sms->blacklist.'<br />';
-    	        echo 'WIADOMOŚĆ: '.$sms->text.'<br />';
-    	        
-    	  }
-	
-	} catch(Exception $e){
-	    echo 'ERROR: '.$e->getMessage();
-	}
-```
 ## Wymagania
 
-php >= 5.3.9
+- PHP >= 8.4
+- Symfony >= 8.1
 
-symfony >= 2.7.*
+## Instalacja
 
-## Dokumentacja
+Przez Composer:
+
+```bash
+composer require serwersms/serwersmsbundle
+```
+
+Lub ręcznie w `composer.json`:
+
+```json
+{
+    "require": {
+        "serwersms/serwersmsbundle": "^2.0"
+    }
+}
+```
+
+## Konfiguracja
+
+### Opcja 1 — autentykacja przez token
+
+```yaml
+# config/packages/serwer_sms.yaml
+serwer_sms:
+    serwersms_token: '%env(SERWERSMS_TOKEN)%'
+```
+
+### Opcja 2 — autentykacja przez username i password
+
+```yaml
+# config/packages/serwer_sms.yaml
+serwer_sms:
+    serwersms_username: '%env(SERWERSMS_USERNAME)%'
+    serwersms_password: '%env(SERWERSMS_PASSWORD)%'
+```
+
+Opcjonalne parametry dla obu opcji:
+
+```yaml
+serwer_sms:
+    # ...
+    serwersms_api_url: 'https://api2.serwersms.pl'  # domyślnie
+    serwersms_timeout: 30                            # domyślnie
+```
+
+### Opcja 3 — rejestracja ręczna w services.yaml
+
+Zamiast konfiguracji bundla, klasę można zarejestrować bezpośrednio jako serwis Symfony:
+
+Z tokenem:
+
+```yaml
+# config/services.yaml
+services:
+    serwer_sms:
+        class: SerwerSMS\SerwerSMSBundle\SerwerSMSToken
+        public: true
+        arguments:
+            - '%env(SERWERSMS_TOKEN)%'
+
+    SerwerSMS\SerwerSMSBundle\SerwerSMSInterface: '@serwer_sms'
+```
+
+Z username i password:
+
+```yaml
+# config/services.yaml
+services:
+    serwer_sms:
+        class: SerwerSMS\SerwerSMSBundle\SerwerSMS
+        public: true
+        arguments:
+            - '%env(SERWERSMS_USERNAME)%'
+            - '%env(SERWERSMS_PASSWORD)%'
+
+    SerwerSMS\SerwerSMSBundle\SerwerSMSInterface: '@serwer_sms'
+```
+
+## Użycie w kontrolerze
+
+```php
+namespace App\Controller;
+
+use SerwerSMS\SerwerSMSBundle\SerwerSMSInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
+
+class SmsController extends AbstractController
+{
+    public function __construct(private SerwerSMSInterface $serwerSms)
+    {
+    }
+
+    #[Route('/send-sms')]
+    public function sendSms(): JsonResponse
+    {
+        try {
+
+            $result = $this->serwerSms->messages()->sendSms(
+                [
+                    '+48500600700',
+                    '+48600700800'
+                 ],
+                'Test FULL message',
+                'INFORMACJA',
+                [
+                    'test' => true,
+                    'details' => true
+                ]
+            );
+
+            return new JsonResponse($result);
+
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+}
+```
+
+## Przykłady
+
+```php
+try {
+
+    // SMS FULL
+    $result = $this->serwerSms->messages()->sendSms(
+        [
+            '+48500600700',
+            '+48600700800'
+        ],
+        'Test FULL message',
+        'INFORMACJA',
+        [
+            'test' => true,
+            'details' => true
+        ]
+    );
+
+    // SMS ECO
+    $result = $this->serwerSms->messages()->sendSms(
+        [
+            '+48500600700',
+            '+48600700800'
+        ],
+        'Test ECO message',
+        null,
+        [
+            'test' => true,
+            'details' => true
+        ]
+    );
+
+    // VOICE from text
+    $result = $this->serwerSms->messages()->sendVoice(
+        [
+            '+48500600700',
+            '+48600700800'
+        ],
+        [
+            'text' => 'Test message',
+            'test' => true,
+            'details' => true
+        ]
+    );
+
+    // MMS
+    $list = $this->serwerSms->files()->index('mms');
+    $result = $this->serwerSms->messages()->sendMms(
+        [
+            '+48500600700',
+            '+48600700800'
+        ],
+        'MMS Title',
+        [
+            'test' => true,
+            'file_id' => $list->items[0]->id,
+            'details' => true
+        ]
+    );
+
+    echo 'Skolejkowano: ' . $result->queued . '<br />';
+    echo 'Niewysłano: ' . $result->unsent . '<br />';
+
+    foreach ($result->items as $sms) {
+        echo 'ID: ' . $sms->id . '<br />';
+        echo 'NUMER: ' . $sms->phone . '<br />';
+        echo 'STATUS: ' . $sms->status . '<br />';
+        echo 'CZĘŚCI: ' . $sms->parts . '<br />';
+        echo 'WIADOMOŚĆ: ' . $sms->text . '<br />';
+    }
+
+} catch (\Exception $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
+```
+
+### Wysyłka spersonalizowanych SMS
+
+```php
+try {
+
+    $messages[] = [
+        'phone' => '500600700',
+        'text' => 'First message'
+    ];
+    $messages[] = [
+        'phone' => '600700800',
+        'text' => 'Second message'
+    ];
+
+    $result = $this->serwerSms->messages()->sendPersonalized(
+        $messages,
+        'INFORMACJA',
+        [
+            'test' => true,
+            'details' => true
+        ]
+    );
+
+    echo 'Skolejkowano: ' . $result->queued . '<br />';
+    echo 'Niewysłano: ' . $result->unsent . '<br />';
+
+    foreach ($result->items as $sms) {
+        echo 'ID: ' . $sms->id . '<br />';
+        echo 'NUMER: ' . $sms->phone . '<br />';
+        echo 'STATUS: ' . $sms->status . '<br />';
+        echo 'CZĘŚCI: ' . $sms->parts . '<br />';
+        echo 'WIADOMOŚĆ: ' . $sms->text . '<br />';
+    }
+
+} catch (\Exception $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
+```
+
+### Pobieranie raportów doręczeń
+
+```php
+try {
+
+    $result = $this->serwerSms->messages()->reports(['id' => ['aca3944055']]);
+
+    foreach ($result->items as $sms) {
+        echo 'ID: ' . $sms->id . '<br />';
+        echo 'NUMER: ' . $sms->phone . '<br />';
+        echo 'STATUS: ' . $sms->status . '<br />';
+        echo 'SKOLEJKOWANO: '. $sms->queued . '<br />';
+        echo 'WYSŁANO: ' . $sms->sent . '<br />';
+        echo 'DORĘCZONO: ' . $sms->delivered . '<br />';
+        echo 'NADAWCA: ' . $sms->sender . '<br />';
+        echo 'TYP: ' . $sms->type . '<br />';
+        echo 'WIADOMOŚĆ: ' . $sms->text . '<br />';
+    }
+
+} catch (\Exception $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
+```
+
+### Pobieranie wiadomości przychodzących
+
+```php
+try {
+
+    $result = $this->serwerSms->messages()->received('ndi');
+
+    foreach ($result->items as $sms) {
+        echo 'ID: ' . $sms->id . '<br />';
+        echo 'TYP: ' . $sms->type . '<br />';
+        echo 'NUMER: ' . $sms->phone . '<br />';
+        echo 'DATA: ' . $sms->received . '<br />';
+        echo 'CZARNA LISTA: ' . $sms->blacklist . '<br />';
+        echo 'WIADOMOŚĆ: ' . $sms->text . '<br />';
+    }
+
+} catch (\Exception $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
+```
+
+## Dokumentacja API
+
 http://dev.serwersms.pl
 
-Konsola API
-
-http://apiconsole.serwersms.pl/
-
+Konsola API: http://apiconsole.serwersms.pl/

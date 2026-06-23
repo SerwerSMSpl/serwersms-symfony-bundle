@@ -1,29 +1,35 @@
 {
-    "name" : "serwersms/serwersmsbundle",
-    "description" : "This is a Symfony2,3,4 Bundle for communication with the API v2 SerwerSMS.pl",
-    "type" : "symfony-bundle",
-	"version": "1.0.4",
+    "name": "serwersms/serwersmsbundle",
+    "description": "Symfony 8.1 Bundle for communication with the API v2 SerwerSMS.pl",
+    "type": "symfony-bundle",
+    "keywords": ["serwersms", "api", "sms", "symfony"],
+    "homepage": "https://serwersms.pl/",
     "authors": [
         {
             "name": "SerwerSMS.pl",
             "email": "biuro@serwersms.pl"
         }
     ],
-    "keywords" : [
-        "serwersms","api sms","sms"
-    ],
-	"homepage": "https://serwersms.pl/",
-    "license" : [
-        "MIT"
-    ],
-    "require" : {
-		"php": ">=5.3.9"
+    "require": {
+        "php": ">=8.4",
+        "lib-curl": "*",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "symfony/framework-bundle": "^8.0",
+        "symfony/config": "^8.0"
     },
-    "autoload" : {
-        "psr-0" : {
-            "SerwerSMS\\SerwerSMSBundle" : ""
+    "require-dev": {
+        "phpunit/phpunit": "^12.0",
+        "symfony/test-pack": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SerwerSMS\\SerwerSMSBundle\\": "src/"
         }
     },
-    "target-dir" : "SerwerSMS/SerwerSMSBundle"
-    
+    "autoload-dev": {
+        "psr-4": {
+            "SerwerSMS\\SerwerSMSBundle\\Tests\\": "tests/"
+        }
+    }
 }
