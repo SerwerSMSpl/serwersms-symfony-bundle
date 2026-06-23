@@ -10,6 +10,7 @@
             "email": "biuro@serwersms.pl"
         }
     ],
+    "license": "Apache-2.0",
     "require": {
         "php": ">=8.4",
         "lib-curl": "*",
